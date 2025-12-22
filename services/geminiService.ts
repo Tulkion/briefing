@@ -73,17 +73,17 @@ export const performDeepResearch = async (answers: Answer[]): Promise<DeepResear
   const prompt = `
     Você é um Analista de Venture Capital e CTO Expert. Analise este SaaS e realize uma DEEP RESEARCH (via Google Search).
     
+    INSTRUÇÕES CRÍTICAS DE IDIOMA:
+    - RESPONDA ABSOLUTAMENTE TUDO EM PORTUGUÊS DO BRASIL.
+    - O detailedReport DEVE SER EM PORTUGUÊS.
+    
     INSTRUÇÕES CRÍTICAS PARA O JSON:
     1. suggestedName: Nome moderno e curto.
-    2. insights: [OBRIGATÓRIO] Gere exatamente 7 insights estratégicos. Devem ser "Growth Hacks" agressivos, modelos de monetização disruptivos ou diferenciais de IA. NUNCA DEIXE VAZIO.
-    3. vibeCodingPrompt: Este prompt deve ser um "Master System Instruction" completo para IAs de código (Cursor, Windsurf). 
+    2. insights: Gere exatamente 7 insights estratégicos em Português.
+    3. vibeCodingPrompt: Este prompt deve ser um "Master System Instruction" completo em Português.
        - STACK: React (Vite), TS, Tailwind, Shadcn/UI, Lucide, Supabase (Auth/DB), React Query.
-       - ARQUITETURA: Explique a estrutura de pastas /src (components, hooks, services, types, utils).
-       - MVP FEATURES: Liste cada funcionalidade com lógica de persistência no Supabase.
-       - DESIGN SYSTEM: Defina cores (Slate 900, Lime 400), Raio de borda (rounded-xl) e animações suaves.
-       - ROADMAP: Guia de 5 passos claros para a IA construir o projeto do zero até o deploy.
-       - DEPLOY: Inclua instruções para hospedar na Vercel e configurar variáveis de ambiente para API_KEY e Supabase.
-    4. detailedReport: Um whitepaper Markdown longo (2500+ palavras) com dados reais e links de fontes.
+       - ARQUITETURA: Explique a estrutura de pastas /src.
+    4. detailedReport: Um whitepaper Markdown longo (2500+ palavras) EM PORTUGUÊS DO BRASIL com dados reais e links de fontes.
   `;
 
   const response = await ai.models.generateContent({
@@ -146,6 +146,7 @@ export const generateTargetedReport = async (topic: string, contextSummary: stri
     
     TAREFA: Use o Google Search para uma DEEP SEARCH (Pesquisa Profunda) sobre o tema: "${topic}".
     
+    ESTA PESQUISA DEVE SER ESCRITA TOTALMENTE EM PORTUGUÊS DO BRASIL.
     Busque dados técnicos, estatísticas de 2024/2025, barreiras de entrada e cases de sucesso.
     Retorne um documento Markdown longo (min 1500 palavras) com links de fontes confiáveis.
   `;

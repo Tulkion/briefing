@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { DeepResearchResult, Answer } from '../types';
 import { Download, Copy, TrendingUp, AlertTriangle, Lightbulb, Activity, Check, Search, Loader2, FileText, ArrowDownToLine } from 'lucide-react';
@@ -25,33 +26,51 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
     const maxLineWidth = pageWidth - (margin * 2);
     let yPos = 20;
 
+    // Cores do Tema
+    const colorBg = [15, 23, 42]; // #0f172a (Slate 900)
+    const colorLime = [163, 230, 53]; // #a3e635 (Lime 400)
+    const colorWhite = [255, 255, 255]; // #ffffff
+
+    const applyThemeBackground = () => {
+      doc.setFillColor(colorBg[0], colorBg[1], colorBg[2]);
+      doc.rect(0, 0, pageWidth, pageHeight, 'F');
+    };
+
     const checkPageBreak = (heightNeeded: number) => {
       if (yPos + heightNeeded > pageHeight - margin) {
         doc.addPage();
+        applyThemeBackground();
         yPos = margin;
         return true;
       }
       return false;
     };
 
-    // Capa
+    // --- CAPA ---
+    applyThemeBackground();
+    
     if (!titleOverride) {
-      doc.setFillColor(15, 23, 42); 
-      doc.rect(0, 0, pageWidth, pageHeight, 'F');
-      doc.setTextColor(163, 230, 53);
+      doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
       doc.setFontSize(30);
       doc.setFont("helvetica", "bold");
       doc.text("ESTUDO DE VIABILIDADE", margin, 60);
-      doc.setFontSize(20);
-      doc.setTextColor(255, 255, 255);
+      
+      doc.setFontSize(22);
+      doc.setTextColor(colorWhite[0], colorWhite[1], colorWhite[2]);
       doc.text(result.suggestedName?.toUpperCase() || "PROJETO", margin, 75);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
+      doc.text(`GERADO EM: ${new Date().toLocaleDateString('pt-BR')}`, margin, 90);
+      
       doc.addPage();
-      doc.setTextColor(0, 0, 0);
+      applyThemeBackground();
       yPos = margin;
     } else {
-      doc.setFontSize(18);
+      doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
+      doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text(titleOverride, margin, yPos);
+      doc.text(titleOverride.toUpperCase(), margin, yPos);
       yPos += 15;
     }
 
@@ -67,6 +86,7 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
         checkPageBreak(20);
         doc.setFontSize(18);
         doc.setFont("helvetica", "bold");
+        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
         doc.text(cleanLine.replace('# ', '').toUpperCase(), margin, yPos);
         yPos += 10;
       } else if (cleanLine.startsWith('## ')) {
@@ -74,11 +94,13 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
         checkPageBreak(15);
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
+        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
         doc.text(cleanLine.replace('## ', ''), margin, yPos);
         yPos += 8;
       } else {
         doc.setFontSize(10);
         doc.setFont("helvetica", "normal");
+        doc.setTextColor(colorWhite[0], colorWhite[1], colorWhite[2]);
         const wrappedLines = doc.splitTextToSize(cleanLine.replace(/\*\*/g, ''), maxLineWidth);
         checkPageBreak(wrappedLines.length * 5 + 5);
         doc.text(wrappedLines, margin, yPos);
