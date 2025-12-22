@@ -26,10 +26,10 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
     const maxLineWidth = pageWidth - (margin * 2);
     let yPos = 20;
 
-    // Cores do Tema
-    const colorBg = [15, 23, 42]; // #0f172a (Slate 900)
-    const colorLime = [163, 230, 53]; // #a3e635 (Lime 400)
-    const colorWhite = [255, 255, 255]; // #ffffff
+    // Cores do Tema (Baseadas no seu Print)
+    const colorBg = [15, 23, 42]; // #0f172a (Azul Marinho Escuro)
+    const colorLime = [163, 230, 53]; // #a3e635 (Lima Brilhante)
+    const colorWhite = [255, 255, 255]; // Branco
 
     const applyThemeBackground = () => {
       doc.setFillColor(colorBg[0], colorBg[1], colorBg[2]);
@@ -46,18 +46,19 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
       return false;
     };
 
-    // --- CAPA ---
+    // --- CAPA E TODAS AS PÁGINAS ---
     applyThemeBackground();
     
     if (!titleOverride) {
+      // Título da Capa
       doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
-      doc.setFontSize(30);
+      doc.setFontSize(32);
       doc.setFont("helvetica", "bold");
       doc.text("ESTUDO DE VIABILIDADE", margin, 60);
       
       doc.setFontSize(22);
       doc.setTextColor(colorWhite[0], colorWhite[1], colorWhite[2]);
-      doc.text(result.suggestedName?.toUpperCase() || "PROJETO", margin, 75);
+      doc.text(result.suggestedName?.toUpperCase() || "CHEQFLOW", margin, 75);
       
       doc.setFontSize(10);
       doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
@@ -83,32 +84,32 @@ const AnalysisReport: React.FC<Props> = ({ result, transcripts }) => {
 
       if (cleanLine.startsWith('# ')) {
         yPos += 10;
-        checkPageBreak(20);
+        checkPageBreak(25);
         doc.setFontSize(18);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
+        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]); // Título em Lima
         doc.text(cleanLine.replace('# ', '').toUpperCase(), margin, yPos);
         yPos += 10;
       } else if (cleanLine.startsWith('## ')) {
         yPos += 5;
-        checkPageBreak(15);
+        checkPageBreak(20);
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]);
+        doc.setTextColor(colorLime[0], colorLime[1], colorLime[2]); // Subtítulo em Lima
         doc.text(cleanLine.replace('## ', ''), margin, yPos);
         yPos += 8;
       } else {
         doc.setFontSize(10);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(colorWhite[0], colorWhite[1], colorWhite[2]);
+        doc.setTextColor(colorWhite[0], colorWhite[1], colorWhite[2]); // Texto em Branco
         const wrappedLines = doc.splitTextToSize(cleanLine.replace(/\*\*/g, ''), maxLineWidth);
-        checkPageBreak(wrappedLines.length * 5 + 5);
+        checkPageBreak(wrappedLines.length * 6 + 5);
         doc.text(wrappedLines, margin, yPos);
-        yPos += (wrappedLines.length * 5) + 3;
+        yPos += (wrappedLines.length * 6);
       }
     });
 
-    const filename = titleOverride ? `DeepSearch_${titleOverride.replace(/\s+/g, '_')}.pdf` : `Relatorio_${result.suggestedName}.pdf`;
+    const filename = titleOverride ? `DeepSearch_${titleOverride.replace(/\s+/g, '_')}.pdf` : `Relatorio_${result.suggestedName || 'CheqFlow'}.pdf`;
     doc.save(filename);
   };
 

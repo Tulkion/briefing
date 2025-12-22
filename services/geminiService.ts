@@ -73,9 +73,10 @@ export const performDeepResearch = async (answers: Answer[]): Promise<DeepResear
   const prompt = `
     Você é um Analista de Venture Capital e CTO Expert. Analise este SaaS e realize uma DEEP RESEARCH (via Google Search).
     
-    INSTRUÇÕES CRÍTICAS DE IDIOMA:
-    - RESPONDA ABSOLUTAMENTE TUDO EM PORTUGUÊS DO BRASIL.
-    - O detailedReport DEVE SER EM PORTUGUÊS.
+    INSTRUÇÕES CRÍTICAS DE IDIOMA E LOCALIZAÇÃO:
+    - TODO O CONTEÚDO DEVE SER EM PORTUGUÊS DO BRASIL.
+    - O detailedReport DEVE SER UM DOCUMENTO FORMAL EM PORTUGUÊS.
+    - O vibeCodingPrompt DEVE SER ESCRITO EM PORTUGUÊS E CONTER UMA INSTRUÇÃO EXPLÍCITA PARA QUE O CÓDIGO GERADO TENHA INTERFACE E TEXTOS APENAS EM PORTUGUÊS (PT-BR).
     
     INSTRUÇÕES CRÍTICAS PARA O JSON:
     1. suggestedName: Nome moderno e curto.
@@ -83,6 +84,7 @@ export const performDeepResearch = async (answers: Answer[]): Promise<DeepResear
     3. vibeCodingPrompt: Este prompt deve ser um "Master System Instruction" completo em Português.
        - STACK: React (Vite), TS, Tailwind, Shadcn/UI, Lucide, Supabase (Auth/DB), React Query.
        - ARQUITETURA: Explique a estrutura de pastas /src.
+       - IDIOMA DO APP: Instrua o AI a construir o App INTEIRAMENTE em Português Brasileiro.
     4. detailedReport: Um whitepaper Markdown longo (2500+ palavras) EM PORTUGUÊS DO BRASIL com dados reais e links de fontes.
   `;
 
