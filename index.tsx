@@ -1,6 +1,12 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
+// Polyfill para process.env em ambiente de produção/browser
+if (typeof window !== 'undefined' && !(window as any).process) {
+  (window as any).process = { env: {} };
+}
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
