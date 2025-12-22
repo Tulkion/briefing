@@ -6,7 +6,7 @@ import AnalysisReport from './components/AnalysisReport';
 import HistoryList from './components/HistoryList';
 import { transcribeAudio, performDeepResearch } from './services/geminiService';
 import { saveBriefing, getHistory, rehydrateAnswers, updateBriefingReport } from './services/storageService';
-import { Sparkles, Activity, Mic, CheckCircle, Lock, Unlock, FileText, X, AlertCircle } from 'lucide-react';
+import { Sparkles, Activity, Mic, CheckCircle, Lock, Unlock, FileText, X, AlertCircle, Share2 } from 'lucide-react';
 
 const ADMIN_PASSWORD = "bullaetech@123";
 
@@ -28,7 +28,12 @@ const App: React.FC = () => {
   const [isAdminUnlocked, setIsAdminUnlocked] = useState(false);
 
   useEffect(() => {
-    // Log informativo para ajudar o usuário a configurar a Vercel
+    // Check for direct form access via URL param
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('start') === 'true') {
+      setView(AppState.FORM);
+    }
+
     if (!process.env.API_KEY) {
       console.warn("API_KEY não encontrada. Certifique-se de configurar a variável de ambiente na Vercel.");
     }
@@ -143,6 +148,13 @@ const App: React.FC = () => {
     }
   };
 
+  const copyShareLink = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('start', 'true');
+    navigator.clipboard.writeText(url.toString());
+    alert("Link do formulário copiado! Agora você pode enviar para quem deve preenchê-lo.");
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] selection:bg-lime-400 selection:text-slate-900">
       
@@ -175,6 +187,16 @@ const App: React.FC = () => {
           </div>
           
           <div className="flex gap-4">
+             {view === AppState.LANDING && (
+                <button 
+                  onClick={copyShareLink}
+                  className="text-slate-300 hover:text-lime-400 text-sm font-semibold flex items-center gap-2 transition-colors bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700"
+                >
+                  <Share2 size={18} />
+                  <span className="hidden md:inline">Compartilhar Link</span>
+                </button>
+             )}
+
              {isAdminUnlocked && view !== AppState.HISTORY && view !== AppState.FORM && (
                  <button 
                    onClick={handleOpenHistory}
@@ -238,11 +260,21 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <button onClick={startApp} className="group relative px-8 py-4 bg-lime-400 hover:bg-lime-500 text-slate-900 font-bold text-lg rounded-full shadow-[0_0_40px_rgba(163,230,53,0.2)] hover:shadow-[0_0_60px_rgba(163,230,53,0.4)] transition-all transform hover:-translate-y-1 flex items-center gap-3">
-                <Mic size={24} />
-                Iniciar Briefing
-                <span className="absolute inset-0 rounded-full ring-2 ring-white/30 group-hover:ring-white/50 animate-ping opacity-20"></span>
-              </button>
+              <div className="flex flex-col md:flex-row gap-4">
+                <button onClick={startApp} className="group relative px-8 py-4 bg-lime-400 hover:bg-lime-500 text-slate-900 font-bold text-lg rounded-full shadow-[0_0_40px_rgba(163,230,53,0.2)] hover:shadow-[0_0_60px_rgba(163,230,53,0.4)] transition-all transform hover:-translate-y-1 flex items-center gap-3">
+                  <Mic size={24} />
+                  Iniciar Briefing
+                  <span className="absolute inset-0 rounded-full ring-2 ring-white/30 group-hover:ring-white/50 animate-ping opacity-20"></span>
+                </button>
+
+                <button 
+                  onClick={copyShareLink}
+                  className="px-8 py-4 bg-slate-800/50 hover:bg-slate-800 text-white font-bold text-lg rounded-full border border-slate-700 transition-all flex items-center gap-3"
+                >
+                  <Share2 size={24} />
+                  Enviar para Alguém
+                </button>
+              </div>
             </div>
           )}
 
