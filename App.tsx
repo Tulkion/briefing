@@ -8,7 +8,7 @@ import { transcribeAudio, performDeepResearch } from './services/geminiService';
 import { saveBriefing, getHistory, rehydrateAnswers, updateBriefingReport } from './services/storageService';
 import { Sparkles, Activity, Mic, CheckCircle, Lock, Unlock, FileText, X, AlertCircle, Share2 } from 'lucide-react';
 
-const ADMIN_PASSWORD = "bullaetech@123";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin";
 
 const App: React.FC = () => {
   const [view, setView] = useState<AppState>(AppState.LANDING);

@@ -3,5 +3,6 @@
   "description": "Ferramenta de pré-reunião para captura de ideias e análise de viabilidade via Gemini 3.0 Pro.",
   "requestFramePermissions": [
     "microphone"
-  ]
+  ],
+  "majorCapabilities": []
 }
